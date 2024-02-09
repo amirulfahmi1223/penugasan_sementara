@@ -1,133 +1,109 @@
 <?php
-include "connection/koneksi.php";
 session_start();
-
-if (isset($_COOKIE['remember'])) {
-  if ($_COOKIE['remember'] == 'true') {
-    $_SESSION['status_login'] = true;
+include "connection/koneksi.php";
+if (isset($_COOKIE['remember_mygalery'])) {
+  if ($_COOKIE['remember_mygalery'] == 'true') {
+    $_SESSION['login_mygalery'] = true;
   }
 }
-if (isset($_SESSION["status_login"])) {
-  echo '<script>window.location="app/index.php"</script>';
+if (isset($_SESSION["login_mygalery"])) {
+  echo '<script>window.location="admin/index.php"</script>';
 }
 if (isset($_POST["login"])) {
-  $user = mysqli_real_escape_string($conn, $_POST['user']);
+  $user = mysqli_real_escape_string($conn, $_POST['email']);
   $password = mysqli_real_escape_string($conn, $_POST['password']);
-  $status = 1;
   //cek akun ada apa tidak
-  $cek = mysqli_query($conn, "SELECT * FROM tb_pengguna WHERE username = '" . $user . "' AND password = '" . $password . "'");
+  $cek = mysqli_query($conn, "SELECT * FROM pengguna WHERE email = '" . $user . "' AND password = '" . $password . "'");
   if (mysqli_num_rows($cek) > 0) {
     $d = mysqli_fetch_object($cek);
-    $aktif = 1;
-    if ($d->status == $aktif) {
-      $_SESSION['status_login'] = true;
-      $id = $d->id;
-      setcookie('remember', 'true', time() + 950400); //waktu 11 hari
-      setcookie('id', $id, time() + (11 * 24 * 60 * 60));
-      //cek remember me
-      if (isset($_POST['remember'])) {
-        setcookie('remember', 'true', time() + 950400); //waktu 11 hari
-        setcookie('id', $id, time() + 950400);
-      }
-      $_SESSION['info'] = 'Login Berhasil';
-      echo '<script>window.location="app/index.php"</script>';
-    } else {
-      $_SESSION['info'] = 'Akun Anda Telah diBlokir!';
-      echo '<script>window.location="login.php"</script>';
+    $_SESSION['login_mygalery'] = true;
+    $id = $d->id_pengguna;
+    setcookie('remember_mygalery', 'true', time() + 2592000); //waktu 30 hari
+    setcookie('id', $id, time() + 2592000); //waktu 30 hari
+    // $_SESSION['info'] = 'Login Berhasil';
+    //cek remember me
+    if (isset($_POST['remember'])) {
+      //buat cookei
+      setcookie('remember_mygalery', 'true', time() + 2592000); //waktu 30 hari
+      setcookie('id', $id, time() + 2592000); //waktu 30 hari
     }
+    //$_COOKEI sendiri untuk menyimpan data user untuk beberapa waktu
+    //ada waktu kadarulasa
+
+    $_SESSION['info'] = 'Login Berhasil';
+    echo '<script>window.location="admin/index.php"</script>';
   } else {
     $_SESSION['info'] = 'Login Gagal';
   }
 }
+
+
+
+
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link rel="icon" href="image/background/favicon.ico">
-  <link rel="icon" href="image/background/favicon.ico" type="image/ico">
-  <title>Login | User</title>
-  <link rel="icon" type="image/x-icon" href="assets/atr.jpeg" />
-  <!-- Custom fonts for this template-->
-  <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-  <!-- Custom styles for this template-->
-  <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
-
+  <title>Login Form</title>
+  <link rel="icon" type="image/x-icon" href="img/logotitle.png" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body class="bg-gradient-primary">
+<body>
   <!-- SWAL -->
   <div class="info-data" data-infodata="<?php if (isset($_SESSION['info'])) {
                                           echo $_SESSION['info'];
                                         }
                                         ?>"></div>
+  <img class="wave" src="image/wave-biru.png">
   <div class="container">
-
-    <!-- Outer Row -->
-    <div class="row justify-content-center">
-
-      <div class="col-xl-10 col-lg-12 col-md-9">
-
-        <div class="card o-hidden border-0 shadow-lg my-5">
-          <div class="card-body p-0">
-            <!-- Nested Row within Card Body -->
-            <div class="row">
-              <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-              <div class="col-lg-6">
-                <div class="p-5">
-                  <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
-                  </div>
-                  <form class="user" method="POST">
-                    <div class="form-group">
-                      <input type="text" name="user" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter username Address...">
-                    </div>
-                    <div class="form-group">
-                      <input type="password" name="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                      <div class="custom-control custom-checkbox small">
-                        <input type="checkbox" name="remember" class="custom-control-input" id="customCheck">
-                        <label class="custom-control-label" for="customCheck">Remember
-                          Me</label>
-                      </div>
-                    </div>
-                    <input type="submit" name="login" value="Login" class="btn btn-primary btn-user btn-block">
-
-                    <hr>
-                  </form>
-                  <div class="text-center">
-                    <a class="small" href="register.php">Create an Account!</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div class="img">
+      <img src="image/dallas-two-color.svg">
+    </div>
+    <div class="login-content">
+      <form action="" method="POST">
+        <img src="image/avatar.png">
+        <h2 class="title">Welcome</h2>
+        <div class="input-div one">
+          <div class="i">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="div">
+            <h5>Email</h5>
+            <input type="email" name="email" class="input">
           </div>
         </div>
-
-      </div>
-
+        <div class="input-div pass">
+          <div class="i">
+            <i class="fas fa-lock"></i>
+          </div>
+          <div class="div">
+            <h5>Password</h5>
+            <input type="password" name="password" class="input">
+          </div>
+        </div>
+        <div class="remember" style="text-align:left;
+        margin-left:26px;
+        display:block;
+        text-decoration: none;
+        color: #999;
+        font-size: 1rem;">
+          <input type="checkbox" name="remember" id="remember">
+          <label for="remember" style="color:#999;">Remember Me</label>
+        </div>
+        <input type="submit" class="btn" name="login" value="Login">
+      </form>
     </div>
-
   </div>
-
-  <!-- Bootstrap core JavaScript-->
-  <script src="assets/vendor/jquery/jquery.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="assets/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="assets/js/sb-admin-2.min.js"></script>
+  <!-- sweet alert -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
   <!-- Swal -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.15.2/dist/sweetalert2.all.min.js"></script>
@@ -162,6 +138,7 @@ if (isset($_POST["login"])) {
       })
     }
   </script>
+  <script type="text/javascript" src="js/main.js"></script>
 </body>
 
 </html>

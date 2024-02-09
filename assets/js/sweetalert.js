@@ -1,5 +1,5 @@
 const notifikasi = $('.info-data').data('infodata');
-if (notifikasi == "Login Berhasil" || notifikasi == "Tambah Pengguna Berhasil" || notifikasi == "Data Berhasil diHapus" || notifikasi == "Edit Pengguna Berhasil" || notifikasi == "Tambah Projek Berhasil" || notifikasi == "Edit Projek Berhasil" || notifikasi == "User Berhasil diBlokir" || notifikasi == "Aktivasi Pengguna Berhasil") {
+if (notifikasi == "Login Berhasil" || notifikasi == "Tambah Pengguna Berhasil" || notifikasi == "Data Berhasil diHapus" || notifikasi == "Edit Berhasil" || notifikasi == "Tambah Berhasil" || notifikasi == "Edit Kategori Berhasil" || notifikasi == "User Berhasil diBlokir" || notifikasi == "Aktivasi Pengguna Berhasil") {
   Swal.fire({
     icon: 'success',
     title: 'Sukses',
@@ -17,7 +17,7 @@ if (notifikasi == "Login Berhasil" || notifikasi == "Tambah Pengguna Berhasil" |
     title: 'MENOLAK AKSES',
     text: notifikasi,
   })
-} else if (notifikasi == "Tambah Pengguna Gagal" || notifikasi == "Tambah Projek Gagal" || notifikasi == "Edit Pengguna Gagal" || notifikasi == "Username Sudah Terdaftar!" || notifikasi == "Data Gagal diHapus" || notifikasi == "Kode Projek Sudah Terdaftar!" || notifikasi == "Edit Projek Gagal" || notifikasi == "User Gagal diBlokir" || notifikasi == "Aktivasi Pengguna Berhasil" || notifikasi == "Akun Anda Telah diBlokir!" || notifikasi == "Akun anda telah diblokir dari projek!") {
+} else if (notifikasi == "Tambah Pengguna Gagal" || notifikasi == "Tambah Projek Gagal" || notifikasi == "Edit Gagal" || notifikasi == "Username Sudah Terdaftar!" || notifikasi == "Data Gagal diHapus" || notifikasi == "Kode Projek Sudah Terdaftar!" || notifikasi == "Edit Kategori Gagal" || notifikasi == "User Gagal diBlokir" || notifikasi == "Aktivasi Pengguna Berhasil" || notifikasi == "Akun Anda Telah diBlokir!" || notifikasi == "Akun anda telah diblokir dari projek!") {
   Swal.fire({
     icon: 'error',
     title: 'GAGAL',
@@ -40,6 +40,12 @@ if (notifikasi == "Login Berhasil" || notifikasi == "Tambah Pengguna Berhasil" |
     icon: 'error',
     title: 'GAGAL',
     text: 'Status projek tidak aktif',
+  })
+} else if (notifikasi == "Tambah Berhasil") {
+  Swal.fire({
+    icon: 'success',
+    title: 'Sukses',
+    text: notifikasi,
   })
 }
 $('.delete-data').on('click', function (e) {

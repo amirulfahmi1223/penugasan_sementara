@@ -34,7 +34,7 @@ if (isset($_POST['register'])) {
         null,
         '" . $nama . "',
         '" . $user . "',
-        '" . $password . "',
+        '" . md5($password) . "',
         '" . $email . "',
         '" . $tlpn . "',
         '" . $level . "',
